@@ -136,3 +136,11 @@ LOGIN_REDIRECT_URL = '/'
 TIME_ZONE = 'Asia/Kolkata'
 USE_TZ = True
 
+
+
+# Static settings for Railway
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Enable WhiteNoise file serving
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
