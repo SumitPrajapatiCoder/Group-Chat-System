@@ -147,3 +147,8 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 # Enable WhiteNoise file serving
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.up.railway.app',
+]
