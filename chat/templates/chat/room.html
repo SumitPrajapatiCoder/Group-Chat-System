@@ -6,479 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Group Chat Room</title>
     <style>
-        /* body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #fceabb, #f8b500);
-            padding: 20px;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        h2 {
-            margin-bottom: 20px;
-            color: #222;
-            font-size: 26px;
-            font-weight: 600;
-        }
-
-        #chat-log {
-            width: 100%;
-            max-width: 700px;
-            background: linear-gradient(135deg, #f6d365, #fda085, #fbc2eb, #a18cd1);
-            background-size: 400% 400%;
-            animation: bgMotion 15s ease infinite;
-            border-radius: 14px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-            padding: 20px;
-            height: 400px;
-            overflow-y: auto;
-            margin-bottom: 20px;
-            border: 1px solid #e0e0e0;
-            scrollbar-width: thin;
-        }
-
-
-        @keyframes bgMotion {
-            0% {
-                background-position: 0% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
-
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
-
-        #chat-log::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        #chat-log::-webkit-scrollbar-thumb {
-            background-color: #bbb;
-            border-radius: 6px;
-        }
-
-        .message {
-            display: flex;
-            margin-bottom: 12px;
-        }
-
-        .message.self {
-            justify-content: flex-end;
-        }
-
-        .message.other {
-            justify-content: flex-start;
-        }
-
-        .message-bubble {
-            max-width: 70%;
-            padding: 12px 16px;
-            border-radius: 18px;
-            font-size: 15px;
-            position: relative;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.07);
-            transition: transform 0.2s;
-            cursor: pointer;
-        }
-
-        .message.self .message-bubble {
-            background: linear-gradient(to right, #a1c4fd, #c2e9fb);
-            color: #083358;
-            border-bottom-right-radius: 4px;
-        }
-
-        .message.other .message-bubble {
-            background-color: #f1f1f1;
-            color: #333;
-            border-bottom-left-radius: 4px;
-            cursor: default;
-        }
-
-        .message-bubble:hover {
-            transform: scale(1.02);
-        }
-
-        .timestamp {
-            font-size: 11px;
-            color: #777;
-            margin-top: 3px;
-            text-align: right;
-        }
-
-        form {
-            width: 100%;
-            max-width: 700px;
-            display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-
-        input[type="text"] {
-            flex: 1;
-            padding: 12px 16px;
-            border-radius: 20px;
-            border: 1px solid #ccc;
-            font-size: 16px;
-            background-color: #fdfdfd;
-            transition: all 0.3s ease;
-        }
-
-        input[type="text"]:focus {
-            outline: none;
-            border-color: #007bff;
-            box-shadow: 0 0 6px rgba(0, 123, 255, 0.2);
-        }
-
-        button {
-            padding: 10px 20px;
-            border: none;
-            background: linear-gradient(to right, #007bff, #00c6ff);
-            color: white;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 600;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
-            transition: background 0.3s ease, transform 0.2s ease;
-        }
-
-        button:hover {
-            background: linear-gradient(to right, #0056b3, #0096c7);
-            transform: scale(1.03);
-        }
-
-        .utility-buttons {
-            width: 100%;
-            max-width: 700px;
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
-        }
-
-
-        .logout-button {
-            background-color: #dc3545;
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 20px;
-            color: white;
-            transition: background 0.3s ease;
-        }
-
-        .logout-button:hover {
-            background-color: #b02a37;
-        }
-
-        .back-button {
-            background-color: #135d9d;
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 20px;
-            color: white;
-            transition: background 0.3s ease;
-        }
-
-        .back-button:hover {
-            background-color: #3e81ad;
-        }
-
-
-        #toast {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            min-width: 250px;
-            max-width: 350px;
-            background-color: #333;
-            color: #fff;
-            padding: 14px 18px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-            opacity: 0;
-            transform: translateX(100%);
-            z-index: 9999;
-            transition: all 0.5s ease;
-            font-family: 'Segoe UI', sans-serif;
-            font-size: 15px;
-        }
-
-
-        #toast.show {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-
-        .toast-icon {
-            font-size: 18px;
-        }
-
-
-        .toast-close {
-            background: transparent;
-            border: none;
-            color: white;
-            font-size: 18px;
-            margin-left: auto;
-            cursor: pointer;
-        }
-
-
-        .toast-success {
-            background: #28a745;
-        }
-
-        .toast-error {
-            background: #dc3545;
-        }
-
-        .toast-info {
-            background: #007bff;
-        }
-
-        .toast-warning {
-            background: #ffc107;
-            color: #000;
-        }
-
-        @media screen and (max-width: 768px) {
-
-            .logout-button,
-            .back-button {
-                width: 100%;
-                text-align: center;
-                padding: 12px 0;
-                font-size: 15px;
-            }
-
-            .logout-button {
-                margin-bottom: 10px;
-            }
-
-
-            #toast {
-                top: auto;
-                bottom: 20px;
-                right: 10px;
-                left: 10px;
-                max-width: 90%;
-                min-width: unset;
-                transform: translateY(100%);
-            }
-
-            #toast.show {
-                transform: translateY(0);
-            }
-
-            .toast-icon {
-                font-size: 16px;
-            }
-
-            .toast-close {
-                font-size: 16px;
-            }
-        }
-
-
-
-
-        @keyframes fadeInOut {
-            0% {
-                opacity: 0;
-                transform: translateX(-50%) translateY(10px);
-            }
-
-            10% {
-                opacity: 1;
-                transform: translateX(-50%) translateY(0);
-            }
-
-            90% {
-                opacity: 1;
-            }
-
-            100% {
-                opacity: 0;
-                transform: translateX(-50%) translateY(10px);
-            }
-        }
-
-        #editModal,
-        #clearModal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-        }
-
-        #editModalContent,
-        #clearModalContent {
-            background: #fff;
-            padding: 25px;
-            border-radius: 14px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-            max-width: 420px;
-            width: 90%;
-            animation: popUp 0.3s ease;
-        }
-
-        @keyframes popUp {
-            0% {
-                transform: scale(0.8);
-                opacity: 0;
-            }
-
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
-        #editModalContent input {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            margin-top: 10px;
-        }
-
-        .modal-buttons {
-            margin-top: 20px;
-            text-align: right;
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-        }
-
-        .modal-buttons button {
-            padding: 10px 16px;
-            font-size: 14px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-        .confirm-btn {
-            background-color: #007bff;
-            color: white;
-        }
-
-        .confirm-btn:hover {
-            background-color: #0056b3;
-        }
-
-        .cancel-btn {
-            background-color: #ccc;
-            color: #333;
-        }
-
-        .cancel-btn:hover {
-            background-color: #999;
-        }
-
-        .clear-options {
-            display: flex;
-            gap: 30px;
-            margin-bottom: 20px;
-            justify-content: center;
-        }
-
-        .clear-options label {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-size: 15px;
-            color: #444;
-            text-align: center;
-        }
-
-        .clear-options input[type="radio"] {
-            margin-bottom: 8px;
-            transform: scale(1.2);
-            accent-color: #007bff;
-        }
-
-        @media screen and (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-
-            #chat-log {
-                height: 300px;
-                padding: 10px;
-            }
-
-            .message-bubble {
-                max-width: 90%;
-                font-size: 14px;
-            }
-
-            form {
-                flex-direction: column;
-            }
-
-            input[type="text"],
-            button {
-                width: 100%;
-                font-size: 15px;
-            }
-
-            .utility-buttons {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .logout-button {
-                width: 100%;
-                text-align: center;
-            }
-
-            .back-button {
-                width: 100%;
-                text-align: center;
-            }
-
-            #editModalContent,
-            #clearModalContent {
-                width: 95%;
-                padding: 15px;
-            }
-
-            .clear-options {
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .modal-buttons {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .modal-buttons button {
-                width: 100%;
-            }
-        } */
-
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #fceabb, #f8b500);
-            padding: 20px;
             margin: 0;
+            padding: 20px;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -708,7 +241,6 @@
             color: #000;
         }
 
-        /* -------- Modal Styling -------- */
         #editModal,
         #clearModal {
             display: none;
@@ -755,7 +287,6 @@
 
         .modal-buttons {
             margin-top: 20px;
-            text-align: right;
             display: flex;
             justify-content: flex-end;
             gap: 10px;
@@ -810,19 +341,20 @@
             accent-color: #007bff;
         }
 
-        /* --------- Responsive Section --------- */
+        /* ----------------- Responsive ----------------- */
         @media screen and (max-width: 768px) {
             body {
-                padding: 10px;
+                padding: 15px;
+                align-items: flex-start;
             }
 
             #chat-log {
-                height: 300px;
-                padding: 10px;
+                height: 320px;
+                padding: 12px;
             }
 
             .message-bubble {
-                max-width: 90%;
+                max-width: 100%;
                 font-size: 14px;
             }
 
@@ -846,7 +378,6 @@
                 width: 100%;
                 text-align: center;
                 padding: 12px 0;
-                font-size: 15px;
             }
 
             #editModalContent,
@@ -875,7 +406,6 @@
                 right: 10px;
                 left: 10px;
                 max-width: 90%;
-                min-width: unset;
                 transform: translateY(100%);
             }
 

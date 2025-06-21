@@ -137,14 +137,8 @@ USE_TZ = True
 
 
 DEBUG = True  
-
-if DEBUG:
-    ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
-    CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000']
-else:
-    ALLOWED_HOSTS = ['.up.railway.app']
-    CSRF_TRUSTED_ORIGINS = ['https://*.up.railway.app']
-
+ALLOWED_HOSTS = ['.up.railway.app']
+CSRF_TRUSTED_ORIGINS = ['https://*.up.railway.app']
 
 
 
