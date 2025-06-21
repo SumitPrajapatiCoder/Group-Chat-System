@@ -23,9 +23,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-pa&1!_h5gj6hu1ky96onelf7nqqd9ad1vh-(9chf-@!%2z4z_g'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ['.up.railway.app']
 
 
 
@@ -125,7 +122,6 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-
 import os
 TEMPLATES[0]['DIRS'] = [os.path.join(BASE_DIR, 'templates')]
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
@@ -139,6 +135,19 @@ USE_TZ = True
 
 
 
+
+DEBUG = True  
+
+if DEBUG:
+    ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+    CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000']
+else:
+    ALLOWED_HOSTS = ['.up.railway.app']
+    CSRF_TRUSTED_ORIGINS = ['https://*.up.railway.app']
+
+
+
+
 # Static settings for Railway
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
@@ -147,8 +156,3 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 # Enable WhiteNoise file serving
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-
-CSRF_TRUSTED_ORIGINS = [
-    'https://*.up.railway.app',
-]
