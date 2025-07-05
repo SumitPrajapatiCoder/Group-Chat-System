@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <title>Group Chat Room</title>
     <style>
         body {
@@ -15,6 +16,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            box-sizing: border-box;
         }
 
         h2 {
@@ -27,17 +29,22 @@
         #chat-log {
             width: 100%;
             max-width: 700px;
+            box-sizing: border-box;
             background: linear-gradient(135deg, #f6d365, #fda085, #fbc2eb, #a18cd1);
             background-size: 400% 400%;
             animation: bgMotion 15s ease infinite;
-            border-radius: 14px;
+            border-radius: 16px;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
             padding: 20px;
-            height: 400px;
+            height: 420px;
             overflow-y: auto;
             margin-bottom: 20px;
             border: 1px solid #e0e0e0;
             scrollbar-width: thin;
+            scroll-behavior: smooth;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
 
         @keyframes bgMotion {
@@ -65,7 +72,7 @@
 
         .message {
             display: flex;
-            margin-bottom: 12px;
+            margin-bottom: 4px;
         }
 
         .message.self {
@@ -77,26 +84,30 @@
         }
 
         .message-bubble {
-            max-width: 70%;
+            max-width: 75%;
             padding: 12px 16px;
             border-radius: 18px;
             font-size: 15px;
             position: relative;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.07);
-            transition: transform 0.2s;
+            transition: transform 0.2s ease;
             cursor: pointer;
+            word-wrap: break-word;
+            line-height: 1.4;
         }
 
         .message.self .message-bubble {
             background: linear-gradient(to right, #a1c4fd, #c2e9fb);
             color: #083358;
             border-bottom-right-radius: 4px;
+            border-top-right-radius: 18px;
         }
 
         .message.other .message-bubble {
-            background-color: #f1f1f1;
+            background-color: #ffffff;
             color: #333;
             border-bottom-left-radius: 4px;
+            border-top-left-radius: 18px;
             cursor: default;
         }
 
@@ -107,8 +118,9 @@
         .timestamp {
             font-size: 11px;
             color: #777;
-            margin-top: 3px;
+            margin-top: 4px;
             text-align: right;
+            padding-right: 6px;
         }
 
         form {
@@ -157,16 +169,27 @@
             max-width: 700px;
             display: flex;
             justify-content: space-between;
+            gap: 10px;
+            flex-wrap: nowrap;
             margin-top: 10px;
         }
 
-        .logout-button,
-        .back-button {
-            padding: 10px 20px;
-            border-radius: 20px;
-            color: white;
+        .utility-buttons a,
+        .utility-buttons button {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            font-size: 14px;
+            border-radius: 16px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .utility-buttons a {
             text-decoration: none;
-            transition: background 0.3s ease;
+            color: white;
         }
 
         .logout-button {
@@ -241,29 +264,44 @@
             color: #000;
         }
 
+        #editModalContent input {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            margin-top: 10px;
+            box-sizing: border-box;
+        }
+
         #editModal,
-        #clearModal {
+        #clearModal,
+        #userListModal {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
             background: rgba(0, 0, 0, 0.5);
             justify-content: center;
             align-items: center;
             z-index: 9999;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
         }
 
         #editModalContent,
-        #clearModalContent {
-            background: #fff;
-            padding: 25px;
-            border-radius: 14px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-            max-width: 420px;
-            width: 90%;
+        #clearModalContent,
+        #userListModal>div {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
             animation: popUp 0.3s ease;
+            overflow: hidden;
+            box-sizing: border-box;
         }
 
         @keyframes popUp {
@@ -278,18 +316,12 @@
             }
         }
 
-        #editModalContent input {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            margin-top: 10px;
-        }
-
         .modal-buttons {
             margin-top: 20px;
             display: flex;
             justify-content: flex-end;
             gap: 10px;
+            flex-wrap: wrap;
         }
 
         .modal-buttons button {
@@ -299,6 +331,7 @@
             border: none;
             cursor: pointer;
             transition: background 0.3s ease;
+            flex: 1 1 45%;
         }
 
         .confirm-btn {
@@ -324,6 +357,7 @@
             gap: 30px;
             margin-bottom: 20px;
             justify-content: center;
+            flex-wrap: wrap;
         }
 
         .clear-options label {
@@ -341,49 +375,81 @@
             accent-color: #007bff;
         }
 
-        /* ----------------- Responsive ----------------- */
         @media screen and (max-width: 768px) {
             body {
-                padding: 15px;
-                align-items: flex-start;
+                padding: 10px;
+                align-items: stretch;
             }
 
             #chat-log {
                 height: 320px;
-                padding: 12px;
+                padding: 14px;
+                gap: 10px;
             }
 
             .message-bubble {
                 max-width: 100%;
                 font-size: 14px;
+                padding: 10px 14px;
+            }
+
+            .timestamp {
+                font-size: 10px;
+                padding-right: 4px;
             }
 
             form {
-                flex-direction: column;
+                flex-direction: row;
+                gap: 8px;
+                width: 100%;
             }
 
-            input[type="text"],
-            button {
-                width: 100%;
-                font-size: 15px;
+            input[type="text"] {
+                font-size: 14px;
+                padding: 10px 12px;
+            }
+
+            button[type="submit"] {
+                padding: 10px 16px;
+                font-size: 14px;
             }
 
             .utility-buttons {
-                flex-direction: column;
-                gap: 10px;
+                flex-direction: row;
+                justify-content: space-between;
+                gap: 6px;
+                width: 100%;
+                flex-wrap: nowrap;
             }
 
             .logout-button,
-            .back-button {
-                width: 100%;
+            .back-button,
+            .utility-buttons a,
+            .utility-buttons button {
+                flex: 1 1 24%;
+                min-width: 60px;
+                padding: 10px 8px;
+                font-size: 14px;
+                border-radius: 16px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
                 text-align: center;
-                padding: 12px 0;
+                box-sizing: border-box;
             }
 
             #editModalContent,
             #clearModalContent {
                 width: 95%;
-                padding: 15px;
+                padding: 16px;
+            }
+
+            #editModalContent input {
+                width: 100%;
+                padding: 12px;
+                font-size: 15px;
+                margin-top: 10px;
+                box-sizing: border-box;
             }
 
             .clear-options {
@@ -400,17 +466,38 @@
                 width: 100%;
             }
 
+            #userListModal>div {
+                width: 95%;
+                padding: 16px;
+                max-height: 80vh;
+                overflow-x: auto;
+            }
+
+            #userListModal table {
+                width: 100%;
+                min-width: 500px;
+                table-layout: fixed;
+                border-collapse: collapse;
+            }
+
+            #userListModal th,
+            #userListModal td {
+                padding: 8px;
+                text-align: left;
+                word-break: break-word;
+            }
+
             #toast {
-                top: auto;
-                bottom: 20px;
-                right: 10px;
-                left: 10px;
+                top: 20px;
+                right: 20px;
+                left: auto;
+                bottom: auto;
                 max-width: 90%;
-                transform: translateY(100%);
+                transform: translateX(100%);
             }
 
             #toast.show {
-                transform: translateY(0);
+                transform: translateX(0);
             }
 
             .toast-icon,
@@ -666,22 +753,22 @@
     <form method="POST" action="">
         {% csrf_token %}
         <input type="text" name="content" placeholder="Type your message..." required />
-        <button type="submit">Send</button>
+        <button type="submit"><i class="fa-solid fa-paper-plane"></i></button>
     </form>
 
 
     <div class="utility-buttons">
-        <a href="{% url 'back' %}" class="back-button">Back</a>
+        <a href="{% url 'back' %}" class="back-button"><i class="fa-solid fa-arrow-left"></i></a>
 
         <button onclick="clearMessages()">
-            Delete Chats
+            <i class="fa-solid fa-trash"></i>
         </button>
 
         {% if request.user.is_superuser %}
-        <button onclick="toggleUserList()">List Users</button>
+        <button onclick="toggleUserList()"><i class="fa-solid fa-users"></i></button>
         {% endif %}
 
-        <a href="{% url 'logout' %}" class="logout-button">Logout</a>
+        <a href="{% url 'logout' %}" class="logout-button"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
     </div>
 
 

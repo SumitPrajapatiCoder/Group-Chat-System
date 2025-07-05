@@ -139,6 +139,7 @@ def logout_view(request):
     auth_logout(request)
     return redirect('login')
 
+
 def back(request):
    if request.user.is_authenticated:
         return redirect('home')
